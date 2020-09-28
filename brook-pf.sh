@@ -68,7 +68,7 @@ check_pid(){
 	PID=$(ps -ef| grep "brook relays"| grep -v grep| grep -v ".sh"| grep -v "init.d"| grep -v "service"| awk '{print $2}')
 }
 check_new_ver(){
-	echo -e "请输入要下载安装的 Brook 版本号 ${Green_font_prefix}[ 格式是日期，例如: v20180909 ]${Font_color_suffix}
+	echo -e "请输入要下载安装的 Brook 版本号 ${Green_font_prefix}[ 格式是日期，例如: v20200701 ]${Font_color_suffix}
 版本列表请去这里获取：${Green_font_prefix}[ https://github.com/keybook1/keybook/releases ]${Font_color_suffix}"
 	read -e -p "直接回车即自动获取:" brook_new_ver
 	if [[ -z ${brook_new_ver} ]]; then
