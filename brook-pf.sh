@@ -67,37 +67,7 @@ check_crontab_installed_status(){
 check_pid(){
 	PID=$(ps -ef| grep "brook relays"| grep -v grep| grep -v ".sh"| grep -v "init.d"| grep -v "service"| awk '{print $2}')
 }
-check_new_ver(){
-	echo -e "请输入要下载安装的 Brook 版本号 ${Green_font_prefix}[ 格式是日期，例如: v20200701 ]${Font_color_suffix}
-版本列表请去这里获取：${Green_font_prefix}[ https://github.com/keybook1/keybook/releases ]${Font_color_suffix}"
-	read -e -p "直接回车即自动获取:" brook_new_ver
-	if [[ -z ${brook_new_ver} ]]; then
-		brook_new_ver=$(wget -qO- https://github.com/keybook1/keybook/releases/| grep "tag_name"| head -n 1| awk -F ":" '{print $2}'| sed 's/\"//g;s/,//g;s/ //g')
-		[[ -z ${brook_new_ver} ]] && echo -e "${Error} Brook 最新版本获取失败！" && exit 1
-		echo -e "${Info} 检测到 Brook 最新版本为 [ ${brook_new_ver} ]"
-	else
-		echo -e "${Info} 开始下载 Brook [ ${brook_new_ver} ] 版本！"
-	fi
-}
-check_ver_comparison(){
-	brook_now_ver=$(${brook_file} -v|awk '{print $3}')
-	[[ -z ${brook_now_ver} ]] && echo -e "${Error} Brook 当前版本获取失败 !" && exit 1
-	brook_now_ver="v${brook_now_ver}"
-	if [[ "${brook_now_ver}" != "${brook_new_ver}" ]]; then
-		echo -e "${Info} 发现 Brook 已有新版本 [ ${brook_new_ver} ]，旧版本 [ ${brook_now_ver} ]"
-		read -e -p "是否更新 ? [Y/n] :" yn
-		[[ -z "${yn}" ]] && yn="y"
-		if [[ $yn == [Yy] ]]; then
-			check_pid
-			[[ ! -z $PID ]] && kill -9 ${PID}
-			rm -rf ${brook_file}
-			Download_brook
-			Start_brook
-		fi
-	else
-		echo -e "${Info} 当前 Brook 已是最新版本 [ ${brook_new_ver} ]" && exit 1
-	fi
-}
+
 Download_brook(){
 	[[ ! -e ${file} ]] && mkdir ${file}
 	cd ${file}
